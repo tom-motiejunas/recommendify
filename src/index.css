@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300&family=Zilla+Slab:wght@300&display=swap");
+
+@layer base {
+  @font-face {
+    font-family: Oxygen;
+  }
+  @font-face {
+    font-family: sans-serif;
+  }
+}
+.selected {
+  border-color: green;
+}
+.nav-list {
+  transform: translate(0, -100%);
+}
+.active {
+  transform: translate(0, 0) !important;
+}
+.grow {
+  height: 150px;
+}
+.logo-font {
+  font-family: "Zilla Slab", serif;
+}
