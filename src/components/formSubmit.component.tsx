@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import {
   getFirestore,
@@ -7,6 +7,8 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { componentContent } from "../translation";
+import { languageContext } from "../App";
 
 interface errorInterface {
   firstName: Array<string>;
@@ -46,6 +48,14 @@ export const FormSubmit: React.FC<Props> = ({
   function showError() {
     setRedirect("error");
   }
+
+  const { language } = useContext(languageContext);
+  const [componentContentState, setComponentContentState] = useState(
+    componentContent[language]
+  );
+  useEffect(() => {
+    setComponentContentState(componentContent[language]);
+  }, [language]);
 
   async function sendData(content: object) {
     const timeoutTime = 10000;
@@ -89,14 +99,14 @@ export const FormSubmit: React.FC<Props> = ({
           allGood = false;
           newErrorState = {
             ...newErrorState,
-            firstName: ["Laukelis privalomas"],
+            firstName: [componentContentState.formSubmit.required],
           };
         }
         if (!lastName) {
           allGood = false;
           newErrorState = {
             ...newErrorState,
-            lastName: ["Laukelis privalomas"],
+            lastName: [componentContentState.formSubmit.required],
           };
         }
       }
@@ -112,7 +122,7 @@ export const FormSubmit: React.FC<Props> = ({
         allGood = false;
         newErrorState = {
           ...newErrorState,
-          groupSize: ["Laukelis privalomas"],
+          groupSize: [componentContentState.formSubmit.required],
         };
       }
     }
@@ -135,7 +145,7 @@ export const FormSubmit: React.FC<Props> = ({
         allGood = false;
         newErrorState = {
           ...newErrorState,
-          problem: ["Pasirinkite vieną iš nurodytų"],
+          problem: [componentContentState.formSubmit.chooseOne],
         };
       }
     }
@@ -147,7 +157,10 @@ export const FormSubmit: React.FC<Props> = ({
 
       if (!detailsValue) {
         allGood = false;
-        newErrorState = { ...newErrorState, details: ["Laukelis privalomas"] };
+        newErrorState = {
+          ...newErrorState,
+          details: [componentContentState.formSubmit.required],
+        };
       }
     }
     // Contact
@@ -164,7 +177,7 @@ export const FormSubmit: React.FC<Props> = ({
         allGood = false;
         newErrorState = {
           ...newErrorState,
-          contact: ["Pasirinkite bent vieną laukelį ir užpildykite"],
+          contact: [componentContentState.formSubmit.fillOutOne],
         };
       }
     }
@@ -187,7 +200,7 @@ export const FormSubmit: React.FC<Props> = ({
     <div className="grid place-items-center">
       <input
         type="submit"
-        value="Siųsti"
+        value={componentContentState.formSubmit.send}
         className="cursor-pointer p-2 bg-blue-500 text-white w-32"
         onClick={(e) => validateAll(e)}
       />

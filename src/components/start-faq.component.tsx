@@ -1,7 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { componentContent } from "../translation";
+import { languageContext } from "../App";
 
 interface Props {}
 
@@ -17,6 +19,14 @@ export const StartFaq: React.FC<Props> = () => {
   const itemRef = useRef<spanRefElements>([]);
   const buttonRef = useRef<buttonRefElements>([]);
 
+  const { language } = useContext(languageContext);
+  const [componentContentState, setComponentContentState] = useState(
+    componentContent[language]
+  );
+  useEffect(() => {
+    setComponentContentState(componentContent[language]);
+  }, [language]);
+
   function hideText(index: number) {
     const item = itemRef.current[index];
     if (item instanceof HTMLSpanElement) {
@@ -31,7 +41,7 @@ export const StartFaq: React.FC<Props> = () => {
   return (
     <section className="flex flex-col justify-center max-w-5xl m-auto md:my-28">
       <h2 className="text-3xl text-center mb-12">
-        Dažniausiai užduodami klausimai
+        {componentContentState.startFaq.title}
       </h2>
       {questionTemp.map((props, i) => (
         <div className="relative" key={i}>

@@ -1,6 +1,8 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 
 import { ErrorMsg } from "../errorMsg.component";
+import { componentContent } from "../../translation";
+import { languageContext } from "../../App";
 
 interface Props {
   validateInput: Function;
@@ -20,6 +22,14 @@ export const ContactForm: React.FC<Props> = ({
   const phoneChoice = useRef<HTMLInputElement>(null);
   const emailChoice = useRef<HTMLInputElement>(null);
 
+  const { language } = useContext(languageContext);
+  const [componentContentState, setComponentContentState] = useState(
+    componentContent[language]
+  );
+  useEffect(() => {
+    setComponentContentState(componentContent[language]);
+  }, [language]);
+
   function onChoose(
     e: React.ChangeEvent<HTMLInputElement>,
     choise: HTMLInputElement | null
@@ -34,7 +44,7 @@ export const ContactForm: React.FC<Props> = ({
 
   return (
     <div className="mb-5">
-      <label htmlFor="">Susisiekti</label>
+      <label htmlFor="">{componentContentState.form.contact.title}</label>
       <div className="flex flex-col">
         <div className="mt-2">
           <input
@@ -43,13 +53,17 @@ export const ContactForm: React.FC<Props> = ({
             className="mr-2 cursor-pointer"
             onChange={(e) => onChoose(e, emailChoice.current)}
           />
-          <label htmlFor="email-choise">Elektroniniu paštu</label>
+          <label htmlFor="email-choise">
+            {componentContentState.form.contact.choises.email}
+          </label>
         </div>
         <div
           className="flex flex-col mt-2 overflow-hidden h-0 transition-all"
           ref={emailChoice}
         >
-          <label htmlFor="email">Elektroninis Paštas</label>
+          <label htmlFor="email">
+            {componentContentState.form.contact.email}
+          </label>
           <input
             type="text"
             name="email"
@@ -70,13 +84,17 @@ export const ContactForm: React.FC<Props> = ({
             className="mr-2 cursor-pointer"
             onChange={(e) => onChoose(e, phoneChoice.current)}
           />
-          <label htmlFor="phone-choise">Telefonu</label>
+          <label htmlFor="phone-choise">
+            {componentContentState.form.contact.choises.phone}
+          </label>
         </div>
         <div
           className="flex flex-col mt-2 overflow-hidden h-0 transition-all"
           ref={phoneChoice}
         >
-          <label htmlFor="phone-num">Telefono Numeris</label>
+          <label htmlFor="phone-num">
+            {componentContentState.form.contact.phone}
+          </label>
           <input
             type="number"
             name="phone-num"

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import { ErrorMsg } from "../errorMsg.component";
+import { componentContent } from "../../translation";
+import { languageContext } from "../../App";
 
 interface Props {
   validateProblemArea: VoidFunction;
@@ -11,9 +13,17 @@ export const ProblemAreaForm: React.FC<Props> = ({
   problemArea,
   validateProblemArea,
 }) => {
+  const { language } = useContext(languageContext);
+  const [componentContentState, setComponentContentState] = useState(
+    componentContent[language]
+  );
+  useEffect(() => {
+    setComponentContentState(componentContent[language]);
+  }, [language]);
+
   return (
     <div className="mb-5">
-      <label htmlFor="">Probleminė sritis</label>
+      <label htmlFor="">{componentContentState.form.problemArea.title}</label>
       <div className="mt-2">
         <input
           type="checkbox"
@@ -22,7 +32,9 @@ export const ProblemAreaForm: React.FC<Props> = ({
           value="Economic"
           onChange={validateProblemArea}
         />
-        <label htmlFor="economic">Ekonominė</label>
+        <label htmlFor="economic">
+          {componentContentState.form.problemArea.economic}
+        </label>
       </div>
       <div>
         <input
@@ -32,7 +44,9 @@ export const ProblemAreaForm: React.FC<Props> = ({
           value="Legal acts, regulations"
           onChange={validateProblemArea}
         />
-        <label htmlFor="regulations">Reguliavimas, juridiniai aktai</label>
+        <label htmlFor="regulations">
+          {componentContentState.form.problemArea.regulations}
+        </label>
       </div>
       <div>
         <input
@@ -42,7 +56,9 @@ export const ProblemAreaForm: React.FC<Props> = ({
           value="Company image"
           onChange={validateProblemArea}
         />
-        <label htmlFor="company-image">Kompanijos įvaizdis</label>
+        <label htmlFor="company-image">
+          {componentContentState.form.problemArea.companyImage}
+        </label>
       </div>
       <div>
         <input
@@ -52,10 +68,14 @@ export const ProblemAreaForm: React.FC<Props> = ({
           value="Advertisement"
           onChange={validateProblemArea}
         />
-        <label htmlFor="">Reklamavimas</label>
+        <label htmlFor="">
+          {componentContentState.form.problemArea.advertisement}
+        </label>
       </div>
       <div className="flex flex-col">
-        <label htmlFor="other">Kita</label>
+        <label htmlFor="other">
+          {componentContentState.form.problemArea.other}
+        </label>
         <input
           type="text"
           name="other"

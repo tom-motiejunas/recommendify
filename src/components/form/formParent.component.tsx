@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { ContactForm } from "./contact.component";
 import { DetailsForm } from "./details.component";
@@ -8,6 +8,8 @@ import { LastNameForm } from "./lastName.component";
 import { ProblemAreaForm } from "./problemArea.component";
 
 import { FormSubmit } from "../formSubmit.component";
+import { componentContent } from "../../translation";
+import { languageContext } from "../../App";
 
 interface rendarableObject {
   isFirstName: boolean;
@@ -40,6 +42,14 @@ export const Form: React.FC<Props> = ({
     /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
   let emailReg = /\S+@\S+\.\S+/;
 
+  const { language } = useContext(languageContext);
+  const [componentContentState, setComponentContentState] = useState(
+    componentContent[language]
+  );
+  useEffect(() => {
+    setComponentContentState(componentContent[language]);
+  }, [language]);
+
   const error: errorInterface = {
     firstName: [],
     lastName: [],
@@ -65,17 +75,25 @@ export const Form: React.FC<Props> = ({
     let allErrors = [];
     if (letterLimit) {
       if (input.length > letterLimit) {
-        allErrors.push(`Įveskite iki ${letterLimit} simbolių`);
+        allErrors.push(
+          componentContentState.form.formParent.validateInput.letterLimit(
+            letterLimit
+          )
+        );
       }
     }
     if (regMatch) {
       if (!input.match(regMatch)) {
-        allErrors.push("Blogai įvestas laukelis");
+        allErrors.push(
+          componentContentState.form.formParent.validateInput.regMatch
+        );
       }
     }
     if (required) {
       if (input.length === 0) {
-        allErrors.push("Laukelis privalomas");
+        allErrors.push(
+          componentContentState.form.formParent.validateInput.required
+        );
       }
     }
     let newErrorState = { ...errorState, [error]: allErrors };
@@ -110,7 +128,9 @@ export const Form: React.FC<Props> = ({
     if (!allGood)
       setErrorState({
         ...errorState,
-        problem: ["Pasirinkite vieną iš nurodytų"],
+        problem: [
+          componentContentState.form.formParent.validateProblemArea.problem,
+        ],
       });
   }
 

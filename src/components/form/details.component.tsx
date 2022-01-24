@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useContext, useState } from "react";
 
 import { ErrorMsg } from "../errorMsg.component";
+import { componentContent } from "../../translation";
+import { languageContext } from "../../App";
 
 interface Props {
   validateInput: Function;
@@ -8,9 +10,19 @@ interface Props {
 }
 
 export const DetailsForm: React.FC<Props> = ({ validateInput, details }) => {
+  const { language } = useContext(languageContext);
+  const [componentContentState, setComponentContentState] = useState(
+    componentContent[language]
+  );
+  useEffect(() => {
+    setComponentContentState(componentContent[language]);
+  }, [language]);
+
   return (
     <div className="mb-5 flex flex-col">
-      <label htmlFor="details">Detaliau apibūdinkite problemą</label>
+      <label htmlFor="details">
+        {componentContentState.form.details.title}
+      </label>
       <textarea
         name="details"
         cols={30}

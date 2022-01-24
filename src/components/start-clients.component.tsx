@@ -1,20 +1,30 @@
+import React, { useEffect, useContext, useState } from "react";
 import { faStar, faUserAlt } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farFaStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import React from "react";
+import { componentContent } from "../translation";
+import { languageContext } from "../App";
 
 interface Props {}
 
 export const StartClients: React.FC<Props> = () => {
   const tempArr = ["Jonas", "Petras", "UAB Tinklininkai", "Ignas"];
 
+  const { language } = useContext(languageContext);
+  const [componentContentState, setComponentContentState] = useState(
+    componentContent[language]
+  );
+  useEffect(() => {
+    setComponentContentState(componentContent[language]);
+  }, [language]);
+
   return (
     <section className="flex justify-center items-center flex-col text-center w-full m-auto mb-12 md:mb-24">
-      <h2 className="text-3xl pb-4">Mano klientai patenkinti.</h2>
+      <h2 className="text-3xl pb-4">
+        {componentContentState.startClients.title}
+      </h2>
       <span className="opacity-70 w-96 mb-16 mt-2">
-        Esu dirbęs su daugybė skirtingų reikalavimų turinčių žmonių bei įmonių,
-        todėl žinau kaip atsakyti net į sunkiausius klausimus.
+        {componentContentState.startClients.summary}.
       </span>
       <div className="flex border-t-2 border-b-2 p-5 w-full justify-center flex-wrap pb-0">
         {tempArr.map((el, i) => (
